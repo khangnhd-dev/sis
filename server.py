@@ -16,7 +16,16 @@ for feature_path in Path("./static/feature").glob("*.npy"):
     img_paths.append(Path("./static/img") / (feature_path.stem + ".jpg"))
 features = np.array(features)
 
+# print(img_paths)
 
+
+# @app.route("/api/query-img")
+# def hello_world():
+#     myArr = np.array([1, 2, 3, 4, 5])
+#     return {
+#         "data": [1, 2, 3, 4, 5]
+#     }
+#     return "<p>Demo CBIR</p>"
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -24,12 +33,14 @@ def index():
 
         # Save query image
         img = Image.open(file.stream)  # PIL image
-        uploaded_img_path = "static/uploaded/" + datetime.now().isoformat().replace(":", ".") + "_" + file.filename
+        uploaded_img_path = "static/uploaded/" + datetime.now().isoformat().replace(":",
+                                                                                    ".") + "_" + file.filename
         img.save(uploaded_img_path)
 
         # Run search
         query = fe.extract(img)
-        dists = np.linalg.norm(features-query, axis=1)  # L2 distances to features
+        # L2 distances to features
+        dists = np.linalg.norm(features-query, axis=1)
         ids = np.argsort(dists)[:30]  # Top 30 results
         scores = [(dists[id], img_paths[id]) for id in ids]
 
@@ -40,5 +51,5 @@ def index():
         return render_template('index.html')
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     app.run("0.0.0.0")
