@@ -3,3 +3,6 @@ tasks:
 
 ports:
   - port: 5000
+
+image:
+  file: .gitpod.dockerfile

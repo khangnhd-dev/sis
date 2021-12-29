@@ -1,3 +1,5 @@
 Pillow
 Flask
 tensorflow>=2.0.0
+mysql-connector-python
+Flask-MySQLdb
